@@ -1,3 +1,5 @@
+
+
 from django.contrib import admin
 from .models import Department, Teacher, Application, ApplicationFile, Payment
 
@@ -14,10 +16,13 @@ class ApplicationFileInline(admin.TabularInline):
     readonly_fields = ('uploaded_at',)
     extra = 0
 
+
+
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('id','full_name','department','program','status','applied_at')
     inlines = [ApplicationFileInline]
+
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
