@@ -7,6 +7,9 @@ from .models import Department, Teacher, Application, ApplicationFile, Payment
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('code','name','seats','total_credits','per_credit_fee')
 
+
+
+
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
     list_display = ('name','department','position','email')
@@ -18,10 +21,15 @@ class ApplicationFileInline(admin.TabularInline):
 
 
 
+
+
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('id','full_name','department','program','status','applied_at')
     inlines = [ApplicationFileInline]
+
+
+
 
 
 @admin.register(Payment)
