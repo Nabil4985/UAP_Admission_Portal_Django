@@ -45,6 +45,8 @@ def admission_online(request):
 
 # ---------- Form handler: application submission (multipart POST) ----------
 
+
+
 @require_http_methods(["POST"])
 def application_create(request):
     """
