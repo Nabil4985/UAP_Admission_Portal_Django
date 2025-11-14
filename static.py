@@ -48,3 +48,48 @@ class Department(db.Model):
 
     def __repr__(self):
         return f'<Dept {self.code}>'
+
+class Application(db.Model):
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    full_name = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(200), nullable=False)
+    phone = db.Column(db.String(32), nullable=False)
+    guardian = db.Column(db.String(200))
+    address = db.Column(db.Text)
+    education = db.Column(db.String(300))
+    exam_roll = db.Column(db.String(100))
+    department_id = db.Column(db.Integer, db.ForeignKey('department.id'), nullable=False)
+    program = db.Column(db.String(50), nullable=False)
+    fee_amount = db.Column(db.Integer, default=0)
+    status = db.Column(db.String(32), default='submitted')
+    applied_at = db.Column(db.DateTime, default=datetime.utcnow)
+    paid_at = db.Column(db.DateTime)
+    receipt_text = db.Column(db.Text)
+    password_hash = db.Column(db.String(200))
+
+    department = db.relationship('Department', backref='applications')
+    files = db.relationship('ApplicationFile', backref='application', cascade='all, delete-orphan', lazy=True)
+    payment = db.relationship('Payment', backref='application', uselist=False, cascade='all, delete-orphan')
+
+    def set_password(self, raw):
+        self.password_hash = generate_password_hash(raw)
+
+    def check_password(self, raw):
+        return check_password_hash(self.password_hash or '', raw)
+
+    def __repr__(self):
+        return f'<App {self.id} - {self.full_name}>'
+
+
+class ApplicationFile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    application_id = db.Column(db.String(36), db.ForeignKey('application.id'), nullable=False)
+    kind = db.Column(db.String(32), nullable=False)
+    filename = db.Column(db.String(300), nullable=False)
+    uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def filepath(self):
+        return os.path.join(app.config['UPLOAD_FOLDER'], self.filename)
+
+    def __repr__(self):
+        return f'<File {self.filename}>'
