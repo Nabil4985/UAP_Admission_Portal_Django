@@ -12,12 +12,10 @@ from django.http import HttpResponse, Http404
 
 from .models import Department, Teacher, Application, ApplicationFile, Payment
 
-# ---------- Page views (render the templates in templates/admission/) ----------
+
 
 def index(request):
-    """
-    Home page -> templates/admission/index.html
-    """
+    
     return render(request, 'admission/index.html', {})
 
 
