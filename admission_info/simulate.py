@@ -2,7 +2,7 @@ import random
 import string
 import datetime
 
-# ---------- Utilities --------------------------------------------------
+
 
 def random_id(prefix="ID"):
     """Generate random ID."""

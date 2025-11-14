@@ -16,7 +16,8 @@ urlpatterns = [
     path('apply/index.html', RedirectView.as_view(url='/apply/', permanent=True)),
     path('apply/admission_online.html', RedirectView.as_view(url='/apply/', permanent=True)),
     path('apply/admission.html', RedirectView.as_view(url='/info/', permanent=True)),
-    path('', include('admission.urls', namespace='admission')),  # your app urls
+   
+    path('', include('admission.urls', namespace='admission')),
 ]
 
 
