@@ -12,12 +12,10 @@ from django.http import HttpResponse, Http404
 
 from .models import Department, Teacher, Application, ApplicationFile, Payment
 
-# ---------- Page views (render the templates in templates/admission/) ----------
+
 
 def index(request):
-    """
-    Home page -> templates/admission/index.html
-    """
+    
     return render(request, 'admission/index.html', {})
 
 
@@ -45,21 +43,13 @@ def admission_online(request):
     })
 
 
-# ---------- Form handler: application submission (multipart POST) ----------
+
 
 
 
 @require_http_methods(["POST"])
 def application_create(request):
-    """
-    Handle multipart/form-data POST from admission_online form.
-    Expects the form field names:
-      - full_name, email, phone, guardian, address, education, exam_roll
-      - department (id or code), program
-      - optional: fee_amount (if frontend supplied)
-      - files keys: 'photo', 'sign', 'transcript'
-    Saves Application and ApplicationFile objects.
-    """
+    
 
     data = request.POST
     files = request.FILES
@@ -70,6 +60,8 @@ def application_create(request):
     phone = data.get('phone', '').strip()
     dept_value = data.get('department', '').strip()
     program = data.get('program', '').strip() or 'bachelors'
+
+   
 
     if not (full_name and email and phone and dept_value):
         messages.error(request, 'Please fill name, email, phone and select department.')
@@ -90,6 +82,7 @@ def application_create(request):
         return redirect(reverse('admission:admission_online'))
 
     # Fee resolution: frontend may pass fee_amount, otherwise fallback to dept.per_credit_fee
+    # Error Handling: if invalid, fallback to dept.per_credit_fee
     fee_amount = data.get('fee_amount')
     try:
         fee_amount = int(fee_amount) if fee_amount else int(department.per_credit_fee or 0)
@@ -129,7 +122,7 @@ def application_create(request):
     return redirect(reverse('admission:admission_online'))
 
 
-# ---------- Utility / admin actions (staff only) ----------
+
 
 def staff_required(view_func):
     """Shortcut decorator to require is_staff."""
@@ -139,10 +132,7 @@ def staff_required(view_func):
 @staff_required
 @require_http_methods(["POST"])
 def accept_applicant(request, pk):
-    """
-    Mark application accepted and decrement department seats.
-    Accessible to staff users only.
-    """
+   
     app = get_object_or_404(Application, pk=pk)
     dept = app.department
     if dept.seats <= 0:
@@ -167,14 +157,10 @@ def reject_applicant(request, pk):
     return redirect(request.META.get('HTTP_REFERER', reverse('admin:index')))
 
 
-# ---------- Optional: view application detail (for dashboard display) ----------
+
 
 def application_detail(request, pk):
-    """
-    Render a detail view for a given application, showing uploaded files.
-    Template (optional): templates/admission/application_detail.html
-    If that template does not exist, this view will simply return JSON or a 404.
-    """
+   
     app = get_object_or_404(Application, pk=pk)
     # If you created a template:
     try:

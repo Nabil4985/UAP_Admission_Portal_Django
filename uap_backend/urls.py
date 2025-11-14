@@ -14,7 +14,8 @@ urlpatterns = [
     path('', include('admission.urls', namespace='admission')),  # your app urls
 ]
 
-# Serve media files in development only
+
+
 if settings.DEBUG:
     # Serve user-uploaded media files in development. Ensure MEDIA_URL is set in settings.
     if getattr(settings, 'MEDIA_URL', None):
