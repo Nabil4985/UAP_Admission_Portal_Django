@@ -3,12 +3,39 @@
 {% block content %}
 <div style="max-width:420px;margin:40px auto;padding:20px;background:#fff;border-radius:8px">
   <h3>Login</h3>
+
+  {# Show Django messages (success/error) #}
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {# Show non-field errors from the auth form (e.g., invalid login) #}
+  {% if form.non_field_errors %}
+    <div class="form-errors">
+      {{ form.non_field_errors }}
+    </div>
+  {% endif %}
+
   <form method="post">
     {% csrf_token %}
-    <label>Username<input type="text" name="username" required></label><br/>
-    <label>Password<input type="password" name="password" required></label><br/>
+    {# Preserve redirect target if present #}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+    <label>Username
+      <input type="text" name="username" value="{{ form.username.value|default_if_none:'' }}" required>
+    </label><br/>
+
+    <label>Password
+      <input type="password" name="password" required>
+    </label><br/>
+
     <button type="submit" class="btn primary">Login</button>
   </form>
+  <p style="margin-top:10px"><a href="/">Back to Home</a></p>
 </div>
 {% endblock %}
 

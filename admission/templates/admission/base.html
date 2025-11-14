@@ -22,7 +22,11 @@
     <nav class="top-links">
       {% if user.is_authenticated %}
         <span>Hi, {{ user.username }}</span>
-        <a href="{% url 'admission:logout' %}">Logout</a>
+        
+        <form id="logout-form" action="{% url 'admission:logout' %}" method="post" style="display:inline">
+          {% csrf_token %}
+          <button type="submit" style="background:none;border:none;color:inherit;padding:0;cursor:pointer;">Logout</button>
+        </form>
       {% else %}
         <a href="{% url 'admission:login' %}">Login</a>
       {% endif %}

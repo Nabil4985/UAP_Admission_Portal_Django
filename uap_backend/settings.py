@@ -53,7 +53,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'uap_backend.urls'
 LOGIN_REDIRECT_URL = 'admission:index'
-LOGOUT_REDIRECT_URL = 'index'
+# Ensure logout redirect points to the namespaced index view in the admission app
+LOGOUT_REDIRECT_URL = 'admission:index'
 
 TEMPLATES = [
     {
