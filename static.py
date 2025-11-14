@@ -71,6 +71,8 @@ class Application(db.Model):
     files = db.relationship('ApplicationFile', backref='application', cascade='all, delete-orphan', lazy=True)
     payment = db.relationship('Payment', backref='application', uselist=False, cascade='all, delete-orphan')
 
+    
+
     def set_password(self, raw):
         self.password_hash = generate_password_hash(raw)
 
@@ -82,6 +84,7 @@ class Application(db.Model):
 
 
 class ApplicationFile(db.Model):
+  
     id = db.Column(db.Integer, primary_key=True)
     application_id = db.Column(db.String(36), db.ForeignKey('application.id'), nullable=False)
     kind = db.Column(db.String(32), nullable=False)
