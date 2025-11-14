@@ -11,6 +11,11 @@ urlpatterns = [
     path('admission.html', RedirectView.as_view(url='/info/', permanent=True)),
     path('index.html', RedirectView.as_view(url='/', permanent=True)),
     path('login.html', RedirectView.as_view(url='/login/', permanent=True)),
+    # Support legacy links that include the directory plus the html file,
+    # e.g. requests like `/apply/index.html` should go to canonical `/apply/`.
+    path('apply/index.html', RedirectView.as_view(url='/apply/', permanent=True)),
+    path('apply/admission_online.html', RedirectView.as_view(url='/apply/', permanent=True)),
+    path('apply/admission.html', RedirectView.as_view(url='/info/', permanent=True)),
     path('', include('admission.urls', namespace='admission')),  # your app urls
 ]
 
