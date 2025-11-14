@@ -1,3 +1,4 @@
+# app.py
 import os
 import re
 import uuid
@@ -48,6 +49,7 @@ class Department(db.Model):
 
     def __repr__(self):
         return f'<Dept {self.code}>'
+
 
 class Application(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
