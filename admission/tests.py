@@ -11,7 +11,7 @@ class AdmissionAppTests(TestCase):
 	def test_index_view_renders(self):
 		resp = self.client.get(reverse('admission:index'))
 		self.assertEqual(resp.status_code, 200)
-		# template exists in the project templates; ensure view returns successfully
+		
 		self.assertTemplateUsed(resp, 'admission/index.html')
 
 	def test_admission_info_returns_departments(self):
@@ -21,7 +21,7 @@ class AdmissionAppTests(TestCase):
 		self.assertEqual(resp.status_code, 200)
 		self.assertIn('departments', resp.context)
 		codes = [d.code for d in resp.context['departments']]
-		# admission_info orders by code
+		
 		self.assertEqual(codes, sorted(codes))
 
 	def test_application_create_post_creates_application(self):

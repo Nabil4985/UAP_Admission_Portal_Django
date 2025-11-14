@@ -22,7 +22,9 @@ urlpatterns = [
     path('application/<uuid:pk>/accept/', views.accept_applicant, name='accept_applicant'),
     path('application/<uuid:pk>/reject/', views.reject_applicant, name='reject_applicant'),
 
-    # auth
+    
+
+    
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('logout/', views.CustomLogoutView.as_view(), name='logout'),
 ]

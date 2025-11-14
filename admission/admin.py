@@ -8,8 +8,6 @@ class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('code','name','seats','total_credits','per_credit_fee')
 
 
-
-
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
     list_display = ('name','department','position','email')
@@ -18,9 +16,6 @@ class ApplicationFileInline(admin.TabularInline):
     model = ApplicationFile
     readonly_fields = ('uploaded_at',)
     extra = 0
-
-
-
 
 
 @admin.register(Application)
