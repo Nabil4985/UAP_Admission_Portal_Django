@@ -361,4 +361,100 @@ if __name__ == "__main__":
     print_merit_list(merit)
     print_notice_board()
     save_applicant_data_to_file(portal)
+<<<<<<< HEAD
 >>>>>>> ac4f4d565d17d34ed4c6f5e952d19929cab2a95d
+=======
+    
+
+@app.route("/api/logout", methods=["POST"]) 
+def api_logout():
+    logout_user()
+    return jsonify({"message": "logged out"})
+
+
+@app.route("/api/me")
+def api_me():
+    if not g.user:
+        return jsonify({"user": None}), 200
+    return jsonify({"user": g.user.to_dict()})
+
+
+@app.route("/api/applications", methods=["GET"])
+def api_list_applications():
+    if not g.user:
+        return jsonify({"error": "authentication required"}), 401
+    # Admins see all
+    if g.user.is_admin():
+        q = Application.query
+    else:
+        q = Application.query.filter_by(user_id=g.user.id)
+
+    # Optional filters
+    status = request.args.get("status")
+    program = request.args.get("program")
+
+    if status:
+        q = q.filter_by(status=status)
+    if program:
+        q = q.filter_by(program=program)
+
+    apps = [a.to_dict() for a in q.order_by(Application.created_at.desc()).all()]
+    return jsonify({"applications": apps})
+
+
+@app.route("/api/applications", methods=["POST"])
+def api_create_application():
+    if not g.user:
+        return jsonify({"error": "authentication required"}), 401
+    data = request.json or {}
+    full_name = data.get("full_name")
+    program = data.get("program")
+    if not full_name or not program:
+        return jsonify({"error": "full_name and program are required"}), 400
+    gpa = validate_gpa(data.get("gpa"))
+    app_obj = Application(
+        user_id=g.user.id,
+        full_name=full_name,
+        birth_date=data.get("birth_date"),
+        program=program,
+        gpa=gpa,
+        high_school=data.get("high_school"),
+    )
+    db.session.add(app_obj)
+    db.session.commit()
+    return jsonify({"message": "application created", "application": app_obj.to_dict()}), 201
+
+
+@app.route("/api/applications/<int:app_id>", methods=["GET"])
+def api_get_application(app_id):
+    if not g.user:
+        return jsonify({"error": "authentication required"}), 401
+    app_obj = Application.query.get_or_404(app_id)
+    if not g.user.is_admin() and app_obj.user_id != g.user.id:
+        return jsonify({"error": "forbidden"}), 403
+    return jsonify({"application": app_obj.to_dict()})
+
+
+@app.route("/api/applications/<int:app_id>", methods=["PUT"])
+def api_update_application(app_id):
+    if not g.user:
+        return jsonify({"error": "authentication required"}), 401
+    app_obj = Application.query.get_or_404(app_id)
+    if app_obj.user_id != g.user.id:
+        return jsonify({"error": "forbidden"}), 403
+    if app_obj.status != ApplicationStatus.DRAFT.value:
+        return jsonify({"error": "only draft applications can be edited"}), 400
+    data = request.json or {}
+    # update fields
+    for field in ["full_name", "birth_date", "program", "high_school"]:
+        if field in data:
+            setattr(app_obj, field, data[field])
+    if "gpa" in data:
+        gpa = validate_gpa(data.get("gpa"))
+        if gpa is None:
+            return jsonify({"error": "invalid gpa"}), 400
+        app_obj.gpa = gpa
+    db.session.commit()
+    return jsonify({"message": "application updated", "application": app_obj.to_dict()})
+
+>>>>>>> e64f2ee (contact-info)
