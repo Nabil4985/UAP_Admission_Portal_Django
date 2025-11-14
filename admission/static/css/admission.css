@@ -12,6 +12,8 @@ body{margin:0;font-family: "Segoe UI",
      background:var(--bg);
      color:#123}
 
+
+    
 .adm-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:linear-gradient(90deg,var(--blue-1),var(--blue-2));color:#fff;position:fixed;top:0;left:0;right:0;z-index:40}
 .adm-header .logo{display:flex;gap:12px;align-items:center}
 .adm-header img{height:48px;border-radius:6px;background:#2784e8;padding:3px}
@@ -31,6 +33,7 @@ body{margin:0;font-family: "Segoe UI",
   .calc-wrap{grid-template-columns:1fr}
   .adm-main{padding:14px;margin-top:120px}
 }
+
 .nav-loader{position:fixed;top:0;left:0;right:0;height:3px;z-index:120;pointer-events:none;opacity:0;transition:opacity .2s}
 .nav-loader[aria-hidden="false"]{opacity:1}
 .nav-loader-bar{height:100%;width:0%;background:linear-gradient(90deg,#00c2ff,#0055ff);transition:width .6s ease}
